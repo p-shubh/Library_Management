@@ -59,7 +59,7 @@ func LoginPostHandler(c *gin.Context) {
 
 		user_data := getUserByEmail(reqBody.Email)
 
-		c.SetCookie("id", strconv.Itoa(user_data.Id), time.Now().Hour()*2, "", "", true, true)
+		c.SetCookie("id", strconv.Itoa(user_data.Id), time.Now().Hour(), "", "", true, true)
 		c.Header("result", "5455")
 		res := gin.H{
 			"success": true,

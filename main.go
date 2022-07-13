@@ -10,7 +10,7 @@ import (
 var DB *sql.DB
 
 type USER struct {
-	Id         int    `json:"id" binding:"required"`
+	Id         int    `json:"id"`
 	First_name string `json:"first_name" binding:"required"`
 	Last_name  string `json:"last_name"`
 	Email      string `json:"email" binding:"required"`
@@ -20,7 +20,7 @@ type USER struct {
 
 type ORDER struct {
 	Book_id          string `json:"book_id"`
-	Id               int    `json:"id" binding:"required"`
+	Id               int    `json:"id"`
 	Book_title       string `json:"book_title"`
 	Book_author      string `json:"book_author"`
 	Book_cover_image string `json:"book_cover_image"`

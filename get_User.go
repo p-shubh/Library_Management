@@ -10,16 +10,16 @@ func getUserByEmail(email string) USER {
 
 	row := DB.QueryRow(sqlStatement, email)
 
-	fmt.Println("cvhgvh", reqBody)
+	fmt.Println("check getUserByEmail", reqBody)
 
 	row.Scan(&reqBody.Id, &reqBody.First_name, &reqBody.Last_name, &reqBody.Email, &reqBody.User_type)
 
-	fmt.Println("cvhgvh", reqBody)
+	fmt.Println("check getUserByEmail", reqBody)
 
 	return reqBody
 }
 
-func getUserByGmail(id int) USER {
+func getUserByid(id int) USER {
 
 	reqBody := USER{}
 
