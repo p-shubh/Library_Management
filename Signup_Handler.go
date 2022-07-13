@@ -68,7 +68,7 @@ func SignUpPostHandler(c *gin.Context) {
 	res := gin.H{
 		"success": true,
 		"result":  Result,
-		"message": "Signup Successfull",
+		"message": "Registered Successfull",
 	}
 
 	c.JSON(http.StatusOK, res)

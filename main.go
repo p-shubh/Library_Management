@@ -10,11 +10,23 @@ import (
 var DB *sql.DB
 
 type USER struct {
-	Id         int    `json:"id"`
+	Id         int    `json:"id" binding:"required"`
 	First_name string `json:"first_name" binding:"required"`
 	Last_name  string `json:"last_name"`
 	Email      string `json:"email" binding:"required"`
 	Password   string `json:"password" binding:"required,alphanum,min=12" `
+	User_type  string `json:"user_type"`
+}
+
+type ORDER struct {
+	Book_id          string `json:"book_id"`
+	Id               int    `json:"id" binding:"required"`
+	Book_title       string `json:"book_title"`
+	Book_author      string `json:"book_author"`
+	Book_cover_image string `json:"book_cover_image"`
+	Issue_date       string `json:"issue_date"`
+	Return_date      string `json:"return_date"`
+	Fine             string `json:"fine"`
 }
 
 var (
@@ -42,6 +54,8 @@ func setupRoutes(g *gin.Engine) {
 
 	// g.POST("/signupstudent", StudentSignUpPostHandler)
 	g.POST("/login", LoginPostHandler)
+	g.POST("/logout", logout)
+
 	// g.POST("/loginadmin", AdminLoginPOSTHandler)
 	// g.PUT("/updtaeadmin", AdminUpdtaePUTHandler)
 	// g.PUT("/updtaeadmin", AdminUpdtaePUTHandler)
