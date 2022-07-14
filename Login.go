@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func authentication(reqBody USER) bool {
+func authentication(reqBody Login) bool {
 
 	var count int
 	result := false
@@ -37,7 +37,7 @@ func LoginPostHandler(c *gin.Context) {
 
 	// w := gin.New()
 
-	reqBody := USER{}
+	reqBody := Login{}
 
 	err := c.Bind(&reqBody)
 

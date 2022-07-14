@@ -8,7 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func createOrder(c *gin.Context) {
+func OrderRequest(c *gin.Context) {
+
+	//  ========================================================CHECK_ORDER==============================================================
 
 	reqBody2 := ORDER{}
 	c.Bind(&reqBody2)
@@ -33,7 +35,7 @@ func createOrder(c *gin.Context) {
 
 	// fmt.Println(err2)
 
-	// book stock check===========================================================================
+	// =====================================================book stock check===========================================================================
 
 	if stock == 0 {
 		res := gin.H{
@@ -45,7 +47,7 @@ func createOrder(c *gin.Context) {
 		return
 
 	}
-	// ===========================================================================================
+	// ==============================================================================================================================================
 
 	if err2 != nil {
 		res := gin.H{
@@ -87,12 +89,36 @@ func createOrder(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, res)
 		c.Abort()
-		return
+		// return
 
 	}
 
-	
+	// =====================================================INSERT_ORDER===========================================================================
 
+	approve_grant := "pending"
+
+	insertOrderSQL := `INSERT INTO students_order_detail(id,book_id,issue_date,return_date,approve_grant)values($1,$2,$3,$4,$5)`
+
+	_, err := DB.Exec(insertOrderSQL, reqBody2.Id, reqBody2.Book_id, reqBody2.Issue_date, reqBody2.Return_date, approve_grant)
+
+	if err != nil {
+
+		res := gin.H{
+			"message": "insertOrderSQL is not inserting",
+			"result":  insertOrderSQL,
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	} else {
+		res := gin.H{
+			"status": insertOrderSQL,
+			"result": "success",
+		}
+		c.JSON(http.StatusOK, res)
+	}
+
+	// return Result, err_respo
 }
 
 func calculateTime(issue_date string, return_date string) int {

@@ -7,6 +7,8 @@ import (
 	"github.com/lib/pq"
 )
 
+
+
 func SignUpPostHandler(c *gin.Context) {
 
 	// calling the struct

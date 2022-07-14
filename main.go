@@ -9,8 +9,12 @@ import (
 
 var DB *sql.DB
 
-type date interface{
+// type date interface {
+// }
 
+type Login struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required,alphanum,min=12" `
 }
 
 type USER struct {
@@ -32,6 +36,14 @@ type ORDER struct {
 	Return_date      string `json:"return_date"`
 	Fine             string `json:"fine"`
 }
+
+// type orderrequest struct {
+// 	Id            int    `json:"id"`
+// 	Book_id       string `json:"book_id"`
+// 	Issue_date    string `json:"issue_date"`
+// 	Return_date   string `json:"return_date"`
+// 	Approve_grant string `json:"approve_grant"`
+// }
 
 var (
 	Data map[string]USER
@@ -57,11 +69,11 @@ func main() {
 
 func setupRoutes(g *gin.Engine) {
 
-	g.POST("/signup", SignUpPostHandler)
-	g.POST("/signup/admin", SignUpPostHandler)
+	g.POST("/signup", SignUpPostHandler)                    //for students
+	g.POST("/signup/admin", SignUpPostHandler)              //for admin
+	g.POST("/login", LoginPostHandler)                      //for students and admin
+	g.POST("/logout", logout)                               //for students and admin
+	g.POST("/requestorder", isStudentLogin(), OrderRequest) //for students
 
-	g.POST("/login", LoginPostHandler)
-	g.POST("/logout", logout)
-	g.POST("/createorder", isLogin(), createOrder)
-
+	g.GET("/studentsrequestorder", isAdminLogin(), studentsOrderReq) //for admin
 }
