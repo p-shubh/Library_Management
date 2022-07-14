@@ -91,6 +91,8 @@ func createOrder(c *gin.Context) {
 
 	}
 
+	
+
 }
 
 func calculateTime(issue_date string, return_date string) int {
