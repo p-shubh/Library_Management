@@ -19,8 +19,8 @@ type USER struct {
 }
 
 type ORDER struct {
-	Book_id          string `json:"book_id"`
 	Id               int    `json:"id"`
+	Book_id          string `json:"book_id"`
 	Book_title       string `json:"book_title"`
 	Book_author      string `json:"book_author"`
 	Book_cover_image string `json:"book_cover_image"`
@@ -56,15 +56,8 @@ func setupRoutes(g *gin.Engine) {
 	g.POST("/signup", SignUpPostHandler)
 	g.POST("/signup/admin", SignUpPostHandler)
 
-	// g.POST("/signupstudent", StudentSignUpPostHandler)
 	g.POST("/login", LoginPostHandler)
 	g.POST("/logout", logout)
-	g.POST("/try", isLogin(), try)
-
-	// g.POST("/loginadmin", AdminLoginPOSTHandler)
-	// g.PUT("/updtaeadmin", AdminUpdtaePUTHandler)
-	// g.PUT("/updtaeadmin", AdminUpdtaePUTHandler)
-	// g.DELETE("/deleteadmin", AdminDELETEHandler)
-	// g.DELETE("/deletestudent", StudentDELETEHandler)
+	g.POST("/createorder", isLogin(), createOrder)
 
 }
