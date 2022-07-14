@@ -3,66 +3,72 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func createOrder(c *gin.Context) {
 
-	type OrderReqBookID struct {
-		Id      int    `json:"id"`
-		Book_id string `json:"book_id"`
-	}
-
-	reqBody := OrderReqBookID{}
-	fmt.Println("create order request body", reqBody)
-	reqBody.Id = live_user["presentuser"].Id
-	fmt.Println("create order id", reqBody.Id)
-
-	sqlStatement := "SELECT book_id FROM books_detail where book_id= $1"
-
-	row := DB.QueryRow(sqlStatement, reqBody.Book_id)
-
-	row.Scan(&reqBody.Book_id)
-
-	err := c.Bind(&reqBody) //binding with the data being provided
-
-	if err != nil {
-		res := gin.H{
-			"unable to get book id": "err",
-		}
-
-		c.JSON(http.StatusBadRequest, res)
-	}
-
-	fmt.Println("book_id", reqBody.Book_id)
-
 	reqBody2 := ORDER{}
+	c.Bind(&reqBody2)
+
+	fmt.Println("create order request body", reqBody2)
 
 	reqBody2.Id = live_user["presentuser"].Id
 
-	reqBody2.Book_id = reqBody.Book_id
+	fmt.Println("create order id", reqBody2.Id)
+
+	fmt.Println("book_id", reqBody2.Book_id)
 
 	sqlStatement2 := "SELECT book_title,book_author,book_cover_image FROM books_detail where book_id= $1"
 
-	row2 := DB.QueryRow(sqlStatement2, reqBody.Book_id)
+	row2 := DB.QueryRow(sqlStatement2, reqBody2.Book_id)
 
-	// row2.Scan(&reqBody2.Book_title, reqBody2.Book_author, reqBody2.Book_cover_image,)
+	err2 := row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image)
 
-	row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image)
-
-	err2 := c.Bind(&reqBody) //binding with the data being provided
+	// fmt.Println(err2)
 
 	if err2 != nil {
 		res := gin.H{
-			"unable to insert the data": "err",
+			"err": err2.Error(),
 		}
 
 		c.JSON(http.StatusBadRequest, res)
+	} else {
+		res := gin.H{
+			"result":       reqBody2,
+			"order status": "successfully orderd",
+		}
+
+		c.JSON(http.StatusOK, res)
 	}
 
-	// if reqBody.Book_id != int {
+	fmt.Println(reqBody2)
 
-	// }
+	fmt.Println("reqBody2.Issue_date :", reqBody2.Issue_date)
+	fmt.Println("reqBody2.return_date :", reqBody2.Return_date)
+
+	fmt.Println("calculate time =", calculateTime(reqBody2.Issue_date, reqBody2.Return_date))
+
+}
+
+func calculateTime(issue_date string, return_date string) int {
+
+	// dateString := "2021-11-22"
+	issuedate, _ := time.Parse("2006-01-02", issue_date)
+
+	returndate, _ := time.Parse("2006-01-02", return_date)
+
+	total_duration := returndate.Sub(issuedate)
+
+	fmt.Println(total_duration)
+
+	d, _ := time.ParseDuration(total_duration.String())
+	days := d.Hours() / 24 // 2 days
+
+	fmt.Println(days)
+
+	return int(days)
 
 }

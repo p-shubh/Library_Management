@@ -34,6 +34,8 @@ func isLogin() gin.HandlerFunc {
 				"":       "couldn't able to fetch the id",
 			}
 			c.JSON(http.StatusBadRequest, res)
+			c.Abort() // change 1
+
 		}
 
 		data := getUserByid(id)

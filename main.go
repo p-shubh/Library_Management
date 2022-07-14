@@ -9,6 +9,10 @@ import (
 
 var DB *sql.DB
 
+type date interface{
+
+}
+
 type USER struct {
 	Id         int    `json:"id"`
 	First_name string `json:"first_name" binding:"required"`
