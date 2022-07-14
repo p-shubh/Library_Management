@@ -45,6 +45,10 @@ func main() {
 	router := gin.Default()
 	setupRoutes(router)
 	router.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	// c := isLogin()
+
+	// fmt.Println(c)
 }
 
 func setupRoutes(g *gin.Engine) {
@@ -55,6 +59,7 @@ func setupRoutes(g *gin.Engine) {
 	// g.POST("/signupstudent", StudentSignUpPostHandler)
 	g.POST("/login", LoginPostHandler)
 	g.POST("/logout", logout)
+	g.POST("/try", isLogin(), try)
 
 	// g.POST("/loginadmin", AdminLoginPOSTHandler)
 	// g.PUT("/updtaeadmin", AdminUpdtaePUTHandler)

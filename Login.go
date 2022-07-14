@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,7 +43,8 @@ func LoginPostHandler(c *gin.Context) {
 
 	if err != nil {
 		res := gin.H{
-			"error": err.Error(),
+			"error":  err.Error(),
+			"result": reqBody,
 		}
 
 		c.JSON(http.StatusBadRequest, res)
@@ -59,8 +59,8 @@ func LoginPostHandler(c *gin.Context) {
 
 		user_data := getUserByEmail(reqBody.Email)
 
-		c.SetCookie("id", strconv.Itoa(user_data.Id), time.Now().Hour(), "", "", true, true)
-		c.Header("result", "5455")
+		c.SetCookie("id", strconv.Itoa(user_data.Id), 60*60, "", "", false, false)
+		// c.Header("result", "5455")
 		res := gin.H{
 			"success": true,
 			"message": "sucessfully login",
