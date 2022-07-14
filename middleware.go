@@ -18,7 +18,7 @@ func isLogin() gin.HandlerFunc {
 
 		if err != nil {
 			res := gin.H{
-				"message":   "cheaking code is running or not",
+				"message":   "you have been log out",
 				"my-cookie": ID_cookie,
 			}
 			c.JSON(http.StatusBadRequest, res)

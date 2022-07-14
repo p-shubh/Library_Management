@@ -21,27 +21,50 @@ func createOrder(c *gin.Context) {
 
 	fmt.Println("book_id", reqBody2.Book_id)
 
-	sqlStatement2 := "SELECT book_title,book_author,book_cover_image FROM books_detail where book_id= $1"
+	var stock int
+
+	sqlStatement2 := "SELECT book_title,book_author,book_cover_image,stock FROM books_detail where book_id= $1"
 
 	row2 := DB.QueryRow(sqlStatement2, reqBody2.Book_id)
 
-	err2 := row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image)
+	err2 := row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image, &stock)
+
+	fmt.Println("stock", stock)
 
 	// fmt.Println(err2)
 
-	if err2 != nil {
+	// book stock check===========================================================================
+
+	if stock == 0 {
 		res := gin.H{
-			"err": err2.Error(),
+			"book status": "book is out of stock",
 		}
 
 		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+
+	}
+	// ===========================================================================================
+
+	if err2 != nil {
+		res := gin.H{
+			"err":          err2.Error(),
+			"order status": "sorry we don't have this book in the library",
+		}
+
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+
 	} else {
 		res := gin.H{
 			"result":       reqBody2,
-			"order status": "successfully orderd",
+			"order status": "yes its available in book library",
 		}
 
 		c.JSON(http.StatusOK, res)
+
 	}
 
 	fmt.Println(reqBody2)
@@ -50,6 +73,23 @@ func createOrder(c *gin.Context) {
 	fmt.Println("reqBody2.return_date :", reqBody2.Return_date)
 
 	fmt.Println("calculate time =", calculateTime(reqBody2.Issue_date, reqBody2.Return_date))
+
+	total_time := calculateTime(reqBody2.Issue_date, reqBody2.Return_date)
+
+	if total_time <= 30 {
+		res := gin.H{
+			"status": "yes, its available for order",
+		}
+		c.JSON(http.StatusOK, res)
+	} else if total_time > 30 {
+		res := gin.H{
+			"status": "its not available for more than 30 days",
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+
+	}
 
 }
 
