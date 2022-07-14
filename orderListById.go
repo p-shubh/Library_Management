@@ -7,5 +7,5 @@ import (
 )
 
 func try(c *gin.Context) {
-	fmt.Println("cheak cookie")
+	fmt.Println("try fucntion is successfully running after islogin function")
 }
