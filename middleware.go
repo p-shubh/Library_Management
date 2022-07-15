@@ -41,6 +41,16 @@ func isStudentLogin() gin.HandlerFunc {
 		data := getUserByid(id)
 		fmt.Println(data)
 
+		if data.User_type == "1" {
+
+			res := gin.H{
+				"warning": "admin can not order",
+				// "error":""
+			}
+			c.JSON(http.StatusBadRequest, res)
+			c.Abort()
+		}
+
 		live_user["presentuser"] = data
 		fmt.Println(live_user)
 		fmt.Println("id =", live_user["presentuser"].Id)
@@ -62,7 +72,7 @@ func isAdminLogin() gin.HandlerFunc {
 
 		if err != nil {
 			res := gin.H{
-				"admin":     "you have been log out",
+				"admin": "you have been log out",
 				// "user_type": user_type,
 				"my_cookie": ID_cookie,
 			}
