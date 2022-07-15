@@ -35,15 +35,16 @@ type ORDER struct {
 	Issue_date       string `json:"issue_date"`
 	Return_date      string `json:"return_date"`
 	Fine             string `json:"fine"`
+	Approve_grant    string `json:"approve_grant"`
 }
 
-// type orderrequest struct {
-// 	Id            int    `json:"id"`
-// 	Book_id       string `json:"book_id"`
-// 	Issue_date    string `json:"issue_date"`
-// 	Return_date   string `json:"return_date"`
-// 	Approve_grant string `json:"approve_grant"`
-// }
+type OrderRequested struct {
+	Id            int    `json:"id"`
+	Book_id       string `json:"book_id"`
+	Issue_date    string `json:"issue_date"`
+	Return_date   string `json:"return_date"`
+	Approve_grant string `json:"approve_grant"`
+}
 
 var (
 	Data map[string]USER
