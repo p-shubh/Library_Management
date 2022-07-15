@@ -29,14 +29,14 @@ func logout(c *gin.Context) {
 
 	Data := getUserByid(id)
 
-	if Data.User_type == "1" {
+	if Data.User_type == 1 {
 		res := gin.H{
 			"success": true,
 			"status":  "admin logout succeessfully",
 		}
 		c.JSON(http.StatusOK, res)
 		c.Abort()
-	} else if Data.User_type == "2" {
+	} else if Data.User_type == 2 {
 		res := gin.H{
 			"success": true,
 			"status":  "student logout succeessfully",

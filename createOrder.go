@@ -89,7 +89,7 @@ func OrderRequest(c *gin.Context) {
 		}
 		c.JSON(http.StatusBadRequest, res)
 		c.Abort()
-		// return
+		return
 
 	}
 

@@ -41,10 +41,18 @@ func isStudentLogin() gin.HandlerFunc {
 		data := getUserByid(id)
 		fmt.Println(data)
 
-		if data.User_type == "1" {
+		// =====================================================================================================================
+		if data.User_type == 2 {
 
 			res := gin.H{
-				"warning": "admin can not order",
+				"access": "student login",
+				// "error":""
+			}
+			c.JSON(http.StatusOK, res)
+			// c.Abort()
+		} else {
+			res := gin.H{
+				"access denied": "admin can not order",
 				// "error":""
 			}
 			c.JSON(http.StatusBadRequest, res)
@@ -96,6 +104,23 @@ func isAdminLogin() gin.HandlerFunc {
 
 		data := getUserByid(id)
 		fmt.Println(data)
+
+		if data.User_type == 1 {
+
+			res := gin.H{
+				"access": "admin login",
+				// "error":""
+			}
+			c.JSON(http.StatusOK, res)
+			// c.Abort()
+		} else {
+			res := gin.H{
+				"access denied": "admin login",
+				// "error":""
+			}
+			c.JSON(http.StatusBadRequest, res)
+			c.Abort()
+		}
 
 		live_user["presentuser"] = data
 		fmt.Println(live_user)

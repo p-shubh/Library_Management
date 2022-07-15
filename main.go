@@ -23,7 +23,7 @@ type USER struct {
 	Last_name  string `json:"last_name"`
 	Email      string `json:"email" binding:"required"`
 	Password   string `json:"password" binding:"required,alphanum,min=12" `
-	User_type  string `json:"user_type"`
+	User_type  int    `json:"user_type"`
 }
 
 type ORDER struct {
@@ -44,6 +44,11 @@ type OrderRequested struct {
 	Issue_date    string `json:"issue_date"`
 	Return_date   string `json:"return_date"`
 	Approve_grant string `json:"approve_grant"`
+	Order_ID      int    `json:"order_id"`
+}
+
+type OrderApprove struct {
+	Order_ID int `json:"order_id"`
 }
 
 var (
@@ -58,6 +63,7 @@ func main() {
 	defer DB.Close()
 	// books_csv := readCsvFile("./books.csv")
 	// importcsv(books_csv)
+
 
 	router := gin.Default()
 	setupRoutes(router)
@@ -77,4 +83,6 @@ func setupRoutes(g *gin.Engine) {
 	g.POST("/requestorder", isStudentLogin(), OrderRequest) //for students
 
 	g.GET("/studentsrequestorder", isAdminLogin(), studentsOrderReq) //for admin
+	g.POST("/approveorders", isAdminLogin(), approveOrders)
+
 }

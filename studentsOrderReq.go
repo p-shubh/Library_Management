@@ -20,27 +20,59 @@ func studentsOrderReq(c *gin.Context) {
 
 	// reqBody.Approve_grant = "pending"
 
-	sqlStatatement := `SELECT "id", "book_id", "issue_date", "return_date", "approve_grant" FROM "public"."students_order_detail"
+	sqlStatatement := `SELECT "id", "book_id", "issue_date", "return_date", "approve_grant", "order_id" FROM "public"."students_order_detail"
 	where "approve_grant" = 'pending';`
 
 	row := DB.QueryRow(sqlStatatement)
 
 	// fmt.Println("check getUserByEmail", reqBody)
 
-	err := row.Scan(&reqBody.Id, &reqBody.Book_id, &reqBody.Issue_date, &reqBody.Return_date, &reqBody.Approve_grant)
+	err := row.Scan(&reqBody.Id, &reqBody.Book_id, &reqBody.Issue_date, &reqBody.Return_date, &reqBody.Approve_grant, &reqBody.Order_ID)
 
 	// fmt.Println("check getUserByEmail", reqBody)
 
 	if err != nil {
-		log.Fatal(err)
+		//log.Fatal("ppt", err)
 		res := gin.H{
-			"error": "unable to view order list",
+			"error":  "unable to view order list",
+			"status": "there is no any pending requests",
+		}
+		c.JSON(http.StatusBadRequest, res)
+		// c.Abort()
+		// return
+
+	} else {
+
+		res := gin.H{
+			"status":  "success",
+			"pending": reqBody.Order_ID,
+		}
+		c.JSON(http.StatusOK, res)
+	}
+
+	// return
+
+	sqlStatatement2 := `SELECT "order_id" FROM "public"."students_order_detail" where "approve_grant" = 'approved';`
+
+	row2 := DB.QueryRow(sqlStatatement2)
+
+	// fmt.Println("check getUserByEmail", reqBody)
+
+	err2 := row2.Scan(&reqBody.Order_ID)
+
+	// fmt.Println("check getUserByEmail", reqBody)
+
+	if err2 != nil {
+		log.Fatal(err2)
+		res := gin.H{
+			"result": reqBody.Order_ID,
+			"error":  "unable to view order list",
 		}
 		c.JSON(http.StatusBadRequest, res)
 	} else {
 		res := gin.H{
-			"status": "success",
-			"result": reqBody,
+			"status":   "success",
+			"approved order_id list": reqBody.Order_ID,
 		}
 		c.JSON(http.StatusOK, res)
 	}
