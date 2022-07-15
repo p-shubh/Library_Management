@@ -9,7 +9,7 @@ import (
 
 func logout(c *gin.Context) {
 
-	ID_cookie, err := c.Cookie("id")
+	ID_cookie, _ := c.Cookie("id")
 
 	c.SetCookie("id", "", -1, "", "", true, true)
 
