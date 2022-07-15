@@ -60,11 +60,11 @@ func Return_with_fine(c *gin.Context) {
 
 	Data := students_order_detail_by_id(id)
 
-	res := gin.H{
-		"result": Data,
-	}
+	// res := gin.H{
+	// 	"result": Data,
+	// }
 
-	c.JSON(http.StatusOK, res)
+	// c.JSON(http.StatusOK, res)
 
 	// Total_days := calculateTime(Data.Issue_date, reqBody.Student_Return_date)
 
@@ -104,8 +104,8 @@ func Return_with_fine(c *gin.Context) {
 	} else {
 		res := gin.H{
 			"status":     "update Student_Return_date, total_fine",
-			"result":     "success",
 			"total_fine": total_fine,
+			"result":     Data,
 		}
 		c.JSON(http.StatusOK, res)
 	}

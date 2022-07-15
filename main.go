@@ -90,5 +90,6 @@ func setupRoutes(g *gin.Engine) {
 	g.GET("/studentsrequestorder", isAdminLogin(), studentsOrderReq) //for admin
 	g.POST("/approveorders", isAdminLogin(), approveOrders)          //for admin
 	g.POST("/return", isStudentLogin(), Return_with_fine)            //for students
+	g.GET("/history", isAdminLogin(), studentsHistory) //for admin
 
 }

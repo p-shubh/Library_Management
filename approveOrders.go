@@ -58,7 +58,7 @@ func approveOrders(c *gin.Context) {
 	} else {
 		res := gin.H{
 			"status": reqBody.Order_ID,
-			"result": "aproved success",
+			"result": "approved success",
 		}
 		c.JSON(http.StatusOK, res)
 	}

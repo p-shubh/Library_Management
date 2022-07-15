@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -44,10 +43,11 @@ func studentsOrderReq(c *gin.Context) {
 	} else {
 
 		res := gin.H{
-			"status":  "success",
-			"pending": reqBody.Order_ID,
+			"status":           "success",
+			"pending_order_id": reqBody.Order_ID,
 		}
 		c.JSON(http.StatusOK, res)
+
 	}
 
 	// return
@@ -63,12 +63,12 @@ func studentsOrderReq(c *gin.Context) {
 	// fmt.Println("check getUserByEmail", reqBody)
 
 	if err2 != nil {
-		log.Fatal(err2)
+		// log.Fatal(err2)
 		res := gin.H{
-			"result": reqBody.Order_ID,
-			"error":  "unable to view order list",
+			"still pending order id": reqBody.Order_ID,
+			"error":                  "no any approved order list",
 		}
-		c.JSON(http.StatusBadRequest, res)
+		c.JSON(http.StatusOK, res)
 	} else {
 		res := gin.H{
 			"status":                 "success",

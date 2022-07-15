@@ -116,7 +116,7 @@ func isAdminLogin() gin.HandlerFunc {
 			// c.Abort()
 		} else {
 			res := gin.H{
-				"access denied": "admin login",
+				"access denied": "admin login required",
 				// "error":""
 			}
 			c.JSON(http.StatusBadRequest, res)
