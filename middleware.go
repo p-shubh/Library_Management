@@ -52,7 +52,8 @@ func isStudentLogin() gin.HandlerFunc {
 			// c.Abort()
 		} else {
 			res := gin.H{
-				"access denied": "admin can not order",
+				"warning": "admin can not access this path",
+				"message": "only students are approved",
 				// "error":""
 			}
 			c.JSON(http.StatusBadRequest, res)

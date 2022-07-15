@@ -135,7 +135,7 @@ func calculateTime(issue_date string, return_date string) int {
 	d, _ := time.ParseDuration(total_duration.String())
 	days := d.Hours() / 24 // 2 days
 
-	fmt.Println(days)
+	fmt.Println("days", days)
 
 	return int(days)
 

@@ -19,7 +19,7 @@ func logout(c *gin.Context) {
 	if err != nil {
 		res := gin.H{
 			"status":  "access denied",
-			"warning": "couldn't able to fetch the id",
+			"warning": "couldn't able to fetch the id from the cookie",
 		}
 		c.JSON(http.StatusBadRequest, res)
 		c.Abort() // change 1

@@ -20,14 +20,14 @@ func studentsOrderReq(c *gin.Context) {
 
 	// reqBody.Approve_grant = "pending"
 
-	sqlStatatement := `SELECT "id", "book_id", "issue_date", "return_date", "approve_grant", "order_id" FROM "public"."students_order_detail"
+	sqlStatatement := `SELECT "id", "book_id", "issue_date", "approve_grant", "order_id" FROM "public"."students_order_detail"
 	where "approve_grant" = 'pending';`
 
 	row := DB.QueryRow(sqlStatatement)
 
 	// fmt.Println("check getUserByEmail", reqBody)
 
-	err := row.Scan(&reqBody.Id, &reqBody.Book_id, &reqBody.Issue_date, &reqBody.Return_date, &reqBody.Approve_grant, &reqBody.Order_ID)
+	err := row.Scan(&reqBody.Id, &reqBody.Book_id, &reqBody.Issue_date, &reqBody.Approve_grant, &reqBody.Order_ID)
 
 	// fmt.Println("check getUserByEmail", reqBody)
 
@@ -71,7 +71,7 @@ func studentsOrderReq(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, res)
 	} else {
 		res := gin.H{
-			"status":   "success",
+			"status":                 "success",
 			"approved order_id list": reqBody.Order_ID,
 		}
 		c.JSON(http.StatusOK, res)

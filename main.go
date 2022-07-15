@@ -39,15 +39,22 @@ type ORDER struct {
 }
 
 type OrderRequested struct {
-	Id            int    `json:"id"`
-	Book_id       string `json:"book_id"`
-	Issue_date    string `json:"issue_date"`
-	Return_date   string `json:"return_date"`
-	Approve_grant string `json:"approve_grant"`
-	Order_ID      int    `json:"order_id"`
+	Id                  int    `json:"id"`
+	Book_id             string `json:"book_id"`
+	Issue_date          string `json:"issue_date"`
+	Return_date         string `json:"return_date"`
+	Approve_grant       string `json:"approve_grant"`
+	Order_ID            int    `json:"order_id"`
+	Student_Return_date string `json:"student_return_date"`
 }
 
 type OrderApprove struct {
+	Order_ID int `json:"order_id"`
+}
+
+type Return_Fine struct {
+	Student_Return_date string `json:"student_return_date"`
+	// Fine        string `json:"fine"`
 	Order_ID int `json:"order_id"`
 }
 
@@ -64,7 +71,6 @@ func main() {
 	// books_csv := readCsvFile("./books.csv")
 	// importcsv(books_csv)
 
-
 	router := gin.Default()
 	setupRoutes(router)
 	router.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
@@ -76,13 +82,13 @@ func main() {
 
 func setupRoutes(g *gin.Engine) {
 
-	g.POST("/signup", SignUpPostHandler)                    //for students
-	g.POST("/signup/admin", SignUpPostHandler)              //for admin
-	g.POST("/login", LoginPostHandler)                      //for students and admin
-	g.POST("/logout", logout)                               //for students and admin
-	g.POST("/requestorder", isStudentLogin(), OrderRequest) //for students
-
+	g.POST("/signup", SignUpPostHandler)                             //for students
+	g.POST("/signup/admin", SignUpPostHandler)                       //for admin
+	g.POST("/login", LoginPostHandler)                               //for students and admin
+	g.POST("/logout", logout)                                        //for students and admin
+	g.POST("/requestorder", isStudentLogin(), OrderRequest)          //for students
 	g.GET("/studentsrequestorder", isAdminLogin(), studentsOrderReq) //for admin
-	g.POST("/approveorders", isAdminLogin(), approveOrders)
+	g.POST("/approveorders", isAdminLogin(), approveOrders)          //for admin
+	g.POST("/return", isStudentLogin(), Return_with_fine)            //for students
 
 }
