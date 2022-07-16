@@ -7,8 +7,6 @@ import (
 	"github.com/lib/pq"
 )
 
-
-
 func SignUpPostHandler(c *gin.Context) {
 
 	// calling the struct
@@ -112,23 +110,3 @@ func UniqueViolation(err error) *pq.Error {
 	}
 	return nil
 }
-
-// func StudentSignUpPostHandler(){
-
-// }
-
-// func StudentLoginGETHandler()  {
-
-// }
-
-// func AdminLoginGETHandler()  {
-
-// }
-
-// func AdminUpdtaePUTHandler()  {
-
-// }
-
-// func StudentUpdtaePUTHandler()  {
-
-// }
