@@ -36,6 +36,7 @@ type ORDER struct {
 	Return_date      string `json:"return_date"`
 	Fine             string `json:"fine"`
 	Approve_grant    string `json:"approve_grant"`
+	Order_ID         int    `json:"order_id"`
 }
 
 type OrderRequested struct {
@@ -43,19 +44,37 @@ type OrderRequested struct {
 	Book_id             string `json:"book_id"`
 	Issue_date          string `json:"issue_date"`
 	Return_date         string `json:"return_date"`
+	Student_Return_date string `json:"student_return_date"`
 	Approve_grant       string `json:"approve_grant"`
 	Order_ID            int    `json:"order_id"`
-	Student_Return_date string `json:"student_return_date"`
+	Total_fine          int    `json:"total_fine"`
+	Return_grant        string `json:"return_grant"`
+	Return_request      string `json:"request_return"`
 }
 
 type OrderApprove struct {
 	Order_ID int `json:"order_id"`
 }
 
-type Return_Fine struct {
+type student_Return_Detail struct {
 	Student_Return_date string `json:"student_return_date"`
 	// Fine        string `json:"fine"`
 	Order_ID int `json:"order_id"`
+}
+
+type student_history struct {
+	Id int `json:"id"`
+}
+
+type student_order_history struct {
+	Id                  int    `json:"id"`
+	Book_id             string `json:"book_id"`
+	Issue_date          string `json:"issue_date"`
+	Return_date         string `json:"return_date"`
+	Approve_grant       string `json:"approve_grant"`
+	Order_ID            int    `json:"order_id"`
+	Student_Return_date string `json:"student_return_date"`
+	Fine                int    `json:"fine"`
 }
 
 var (
@@ -82,14 +101,16 @@ func main() {
 
 func setupRoutes(g *gin.Engine) {
 
-	g.POST("/signup", SignUpPostHandler)                             //for students
-	g.POST("/signup/admin", SignUpPostHandler)                       //for admin
-	g.POST("/login", LoginPostHandler)                               //for students and admin
-	g.POST("/logout", logout)                                        //for students and admin
-	g.POST("/requestorder", isStudentLogin(), OrderRequest)          //for students
-	g.GET("/studentsrequestorder", isAdminLogin(), studentsOrderReq) //for admin
-	g.POST("/approveorders", isAdminLogin(), approveOrders)          //for admin
-	g.POST("/return", isStudentLogin(), Return_with_fine)            //for students
-	g.GET("/history", isAdminLogin(), studentsHistory) //for admin
+	g.POST("/signup", SignUpPostHandler)                               //for students
+	g.POST("/signup/admin", SignUpPostHandler)                         //for admin
+	g.POST("/login", LoginPostHandler)                                 //for students and admin
+	g.POST("/logout", logout)                                          //for students and admin
+	g.POST("/createorder", isStudentLogin(), OrderRequest)             //for students
+	g.GET("/studentsorderrequest", isAdminLogin(), studentsOrderReq)   //for admin
+	g.POST("/grantorders", isAdminLogin(), approveOrders)              //for admin
+	g.POST("/returnapprove", isAdminLogin(), Return_approve_with_fine) //for admin
+	g.GET("/gethistory/:id", isAdminLogin(), studentsHistory)          //for admin
+	g.POST("/returnrequest", isStudentLogin(), returnRequest)          //for students
+	g.GET("/getreturnrequest", isAdminLogin(), getReturnRequest)       //for admin
 
 }

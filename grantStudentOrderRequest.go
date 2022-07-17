@@ -49,7 +49,7 @@ func approveOrders(c *gin.Context) {
 	if err != nil {
 
 		res := gin.H{
-			"message": "insertOrderSQL is not inserting",
+			"message": "geting error in approveOrderSQL",
 			"result":  approveOrderSQL,
 		}
 		c.JSON(http.StatusBadRequest, res)
@@ -58,7 +58,7 @@ func approveOrders(c *gin.Context) {
 	} else {
 		res := gin.H{
 			"status": reqBody.Order_ID,
-			"result": "approved success",
+			"result": "approved successfully",
 		}
 		c.JSON(http.StatusOK, res)
 	}

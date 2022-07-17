@@ -12,8 +12,40 @@ func OrderRequest(c *gin.Context) {
 
 	//  ========================================================CHECK_ORDER==============================================================
 
+	var scan_book_id string
+
 	reqBody2 := ORDER{}
 	c.Bind(&reqBody2)
+
+	if reqBody2.Book_id == "" {
+		res := gin.H{
+			"err":    "book_id must not be empty",
+			"result": reqBody2.Book_id,
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
+
+	if reqBody2.Issue_date == "" {
+		res := gin.H{
+			"err":    "Issue_date must not be empty",
+			"result": reqBody2.Issue_date,
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
+
+	if reqBody2.Return_date == "" {
+		res := gin.H{
+			"err":    "Return_date must not be empty",
+			"result": reqBody2.Return_date,
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
 
 	fmt.Println("create order request body", reqBody2)
 
@@ -25,15 +57,26 @@ func OrderRequest(c *gin.Context) {
 
 	var stock int
 
-	sqlStatement2 := "SELECT book_title,book_author,book_cover_image,stock FROM books_detail where book_id= $1"
+	sqlStatement2 := "SELECT book_title,book_author,book_cover_image,book_id,stock FROM books_detail where book_id= $1"
 
 	row2 := DB.QueryRow(sqlStatement2, reqBody2.Book_id)
 
-	err2 := row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image, &stock)
+	err2 := row2.Scan(&reqBody2.Book_title, &reqBody2.Book_author, &reqBody2.Book_cover_image, &scan_book_id, &stock)
 
 	fmt.Println("stock", stock)
 
 	// fmt.Println(err2)
+
+	// =====================================================book id match========================================================================
+
+	if scan_book_id != reqBody2.Book_id {
+		res := gin.H{
+			"warning": "book id is incorrect",
+		}
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
 
 	// =====================================================book stock check===========================================================================
 
@@ -53,6 +96,7 @@ func OrderRequest(c *gin.Context) {
 		res := gin.H{
 			"err":          err2.Error(),
 			"order status": "sorry we don't have this book in the library",
+			"result":       reqBody2,
 		}
 
 		c.JSON(http.StatusBadRequest, res)
@@ -61,8 +105,8 @@ func OrderRequest(c *gin.Context) {
 
 	} else {
 		res := gin.H{
-			"result":       reqBody2,
 			"order status": "yes its available in book library",
+			// "result":       reqBody2,
 		}
 
 		c.JSON(http.StatusOK, res)
@@ -112,13 +156,32 @@ func OrderRequest(c *gin.Context) {
 		return
 	} else {
 		res := gin.H{
-			"status": insertOrderSQL,
-			"result": "success",
+			// "status": reqBody2,
+			"result": "successfully ordered",
 		}
 		c.JSON(http.StatusOK, res)
 	}
 
-	// return Result, err_respo
+	sqlStatement3 := `SELECT approve_grant,order_id FROM students_order_detail where id = $1`
+
+	row3 := DB.QueryRow(sqlStatement3, reqBody2.Id)
+
+	err3 := row3.Scan(&reqBody2.Approve_grant, &reqBody2.Order_ID)
+
+	if err3 != nil {
+		res := gin.H{
+			"error":   err,
+			"message": "sqlstatement3",
+			"result":  sqlStatement3,
+		}
+		c.JSON(http.StatusBadRequest, res)
+	} else {
+		res := gin.H{
+			"result": reqBody2,
+		}
+		c.JSON(http.StatusOK, res)
+	}
+
 }
 
 func calculateTime(issue_date string, return_date string) int {
@@ -140,3 +203,5 @@ func calculateTime(issue_date string, return_date string) int {
 	return int(days)
 
 }
+
+// ======================================completd========================================
