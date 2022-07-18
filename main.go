@@ -62,6 +62,14 @@ type student_Return_Detail struct {
 	Order_ID int `json:"order_id"`
 }
 
+type history struct {
+	Order               ORDER
+	Student_Return_date string `json:"student_return_date"`
+	Total_fine          int    `json:"total_fine"`
+	Return_grant        string `json:"return_grant"`
+	Return_request      string `json:"request_return"`
+}
+
 type student_history struct {
 	Id int `json:"id"`
 }
